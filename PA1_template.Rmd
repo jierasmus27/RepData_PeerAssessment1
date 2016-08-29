@@ -18,8 +18,7 @@ activity_dataset <- read.csv(unzip("activity.zip"))
 ## What is mean total number of steps taken per day?
 1. Calculate the total number of steps taken per day
 ```{r}
-by_date <- group_by(activity_dataset, date)
-total_steps_per_day <- summarise(by_date, steps = sum(steps, na.rm = TRUE))
+total_steps_per_day <- aggregate(steps ~ date, data = activity_dataset, sum, na.rm = TRUE)
 ```
 
 2. Histogram of the total number of steps taken each day
@@ -38,8 +37,7 @@ The mean is `r total_mean` and the median is `r total_median`.
 ## What is the average daily activity pattern?
 1. Make a time series plot (i.e. 𝚝𝚢𝚙𝚎 = "𝚕") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 ```{r}
-by_interval <- group_by(activity_dataset, interval)
-mean_steps_per_interval <- summarise(by_interval, steps = mean(steps, na.rm = TRUE))
+#by_isteps_per_interval <- aggregate(steps ~ interval, data = activity_dataset, mean, na.rm = TRUE)
 
 plot(mean_steps_per_interval$interval, mean_steps_per_interval$steps, type = "l", main = "Average number of steps taken", xlab = "Interval", ylab = "Average Steps")
 ```
@@ -74,7 +72,7 @@ for (i in 1:nrow(activity_dataset)) {
 4. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
 ```{r}
 by_date <- group_by(imputed_dataset, date)
-total_steps_per_day <- summarise(by_date, steps = sum(steps, na.rm = TRUE))
+total_steps_per_day <- aggregate(steps ~ date, data = imputed_dataset, sum, na.rm = TRUE)
 hist(total_steps_per_day$steps, main = "Imputed steps per day")
 
 imputed_mean <- mean(total_steps_per_day$steps)
@@ -112,7 +110,7 @@ total_steps_per_weekday$weekday <- "Weekday"
 
 totals_combined <- rbind(total_steps_per_weekday, total_steps_per_weekend)
 
-xyplot(steps ~ interval | weekday, totals_combined, type = "l", layout = c(1, 2), xlab = "Interval", ylab = "Steps")
+xyplot(steps ~ interval | weekday, totals_combined, type = "l", layout = c(1, 2), xlab = "Interval", ylab = "Steps Amount")
 
 ```
 
